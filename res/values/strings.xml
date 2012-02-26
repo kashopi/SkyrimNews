@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, SkyrimNewsActivity!</string>
     <string name="app_name">SkyrimNews</string>
+    <string name="btnRefresh">Recargar</string>
 
 </resources>
