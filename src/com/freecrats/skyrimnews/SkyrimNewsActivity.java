@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -41,7 +43,7 @@ public class SkyrimNewsActivity extends Activity {
 			do{
 				datos.add(cursor.getString(1));
 			}while(cursor.moveToNext());
-		
+		cursor.close();
     	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,datos);
     	ListView lista = (ListView) findViewById(R.id.listview_news);
     	lista.setAdapter(adapter);
@@ -50,5 +52,14 @@ public class SkyrimNewsActivity extends Activity {
     
     public void refresh_onclick(View v){
     	refreshNewsList();
+    }
+    
+    @Override
+    public void onWindowFocusChanged (boolean hasFocus){
+    	if(hasFocus){
+    		String ns = Context.NOTIFICATION_SERVICE;
+    		NotificationManager nManager = (NotificationManager) getSystemService(ns);
+    		nManager.cancelAll();
+    	}
     }
 }
