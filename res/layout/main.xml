@@ -8,10 +8,11 @@
         android:id="@+id/button1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btnRefresh" />
+        android:text="@string/btnRefresh"
+        android:onClick="refresh_onclick" />
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/listview_news"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
     </ListView>

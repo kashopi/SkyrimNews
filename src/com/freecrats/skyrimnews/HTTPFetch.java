@@ -10,7 +10,7 @@ public class HTTPFetch {
 		InputStream contentStream = null;
 		try{
 			HttpClient httpc=new DefaultHttpClient();
-			HttpResponse response = httpc.execute(new HttpGet("http://www.bethblog.com"));
+			HttpResponse response = httpc.execute(new HttpGet(url));
 			contentStream = response.getEntity().getContent();
 		}catch(Exception e){
 			e.printStackTrace();
