@@ -1,8 +1,11 @@
 package com.freecrats.skyrimnews;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
@@ -38,7 +41,7 @@ public class BGService extends Service{
 		super.onStart(intent, startId);
 		updateTimer.cancel();
 		updateTimer = new Timer("skyrimnewsUpdate");
-		updateTimer.scheduleAtFixedRate(doRefresh, 0, 600*1000);
+		updateTimer.scheduleAtFixedRate(doRefresh, 0, 60*30*1000);
 		Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 	}
 	
@@ -63,6 +66,9 @@ public class BGService extends Service{
 	}
 	
 	public void doSync(){
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String fecha;
         SQLDataStore sds = new SQLDataStore(getApplicationContext(), getPackageName(), null, 1);
 		SQLiteDatabase db = sds.getWritableDatabase();
 
@@ -86,7 +92,7 @@ public class BGService extends Service{
 				String sitename=site.sitename;
 				String baseurl=site.baseurl;
 				boolean found=false;
-				
+				Stack<ContentValues> stack = new Stack<ContentValues>();
 				String contenido = HTTPFetch.getStringFromURL(siteurl);
 				Pattern pattern = Pattern.compile(regexp);
 				Matcher matcher = pattern.matcher(contenido);
@@ -99,8 +105,10 @@ public class BGService extends Service{
 						noticia.put("sitename", sitename);
 						noticia.put("text", title);
 						noticia.put("url", url);
-						noticia.put("date","2012-02-28");
-						db.insert("news", null, noticia);
+						fecha = sdf.format(cal.getTime());
+						noticia.put("date",fecha);
+						//db.insert("news", null, noticia);
+						stack.push(noticia);
 						Log.d("SQL","Insertando noticia");
 						notify=true;
 					}else{
@@ -109,6 +117,13 @@ public class BGService extends Service{
 					//db.execSQL("INSERT INTO news(text,url,date) VALUES(?,?,?)",new String[]=[title,url,new String('2012-02-27')]);
 					found=true;
 				}
+
+				//Guardamos en BD
+				while(!stack.empty()){
+					ContentValues noticia=stack.pop();
+					db.insert("news", null, noticia);
+				}
+				
 				if(!found)
 					Log.d("KSP","NO se han encontrado coincidencias");
 			}

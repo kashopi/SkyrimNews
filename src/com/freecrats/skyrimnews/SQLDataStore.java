@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SQLDataStore extends SQLiteOpenHelper {
 	String sqlCreate="CREATE TABLE news(id INTEGER PRIMARY KEY AUTOINCREMENT," +
-			"sitename VARCHAR(50),baseurl VARCHAR(255),text VARCHAR(50),url VARCHAR(255),date CHAR(10) ,read CHAR(1) DEFAULT 'N')";
+			"sitename VARCHAR(50),baseurl VARCHAR(255),text VARCHAR(50),url VARCHAR(255),date CHAR(14) ,read CHAR(1) DEFAULT 'N')";
 	public SQLDataStore(Context context, String name, CursorFactory factory,
 			int version) {
 		super(context, name, factory, version);
